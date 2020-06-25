@@ -15,11 +15,12 @@ app.get("/bounceme", (req, res) => req.query.url
   : res.status(400).json({ error: "no url" }));
 
 const _getRedirectUrl = req =>
-  `${process.env.AUTH_BOUNCE_URL}?url=${req.protocol}://${req.get('host')}${req.originalUrl}`;
+  `${process.env.AUTH_BOUNCE_URL}?url=${req.protocol}://${req.get('host')}${req.headers['x-starphleet-originalurl']}`;
 
 /** Auth bounce */
 app.all("*", (req, res) => process.env.AUTH_BOUNCE_URL
-  ? res.redirect(_getRedirectUrl(req))
+  // ? res.redirect(_getRedirectUrl(req))
+  ? res.status(200).json({ url: _getRedirectUrl(req) })
   : res.status(400).json({ error: "no AUTH_BOUNCE_URL" }));
 
 /*eslint no-process-env: "off"*/
