@@ -2,8 +2,10 @@
 
 IMAGE_NAME="${IMAGE_NAME:-$(basename $(pwd))}"
 
+[ -t 0 ] && TTY=t
+
 docker run \
-  -it \
+  -i${TTY} \
   --rm \
   --init \
   "${IMAGE_NAME}"
