@@ -7,7 +7,7 @@ const bodyParser = require("body-parser");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get("/diagnostic", (req, res) => res.status(200).end("OK"));
+app.get("/diagnostic", (_, res) => res.status(200).end("OK"));
 
 /** Specific bounce */
 app.get("/bounceme", (req, res) => req.query.url
@@ -15,7 +15,7 @@ app.get("/bounceme", (req, res) => req.query.url
   : res.status(400).json({ error: "no url" }));
 
 const _getRedirectUrl = req =>
-  `${process.env.AUTH_BOUNCE_URL}?url=${req.protocol}://${req.get('host')}${req.headers['x-starphleet-originalurl']}`;
+  `${process.env.AUTH_BOUNCE_URL}?url=https://${req.get('host')}${req.headers['x-starphleet-originalurl']}`;
 
 /** Auth bounce */
 app.all("*", (req, res) => process.env.AUTH_BOUNCE_URL
