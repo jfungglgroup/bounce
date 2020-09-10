@@ -7,7 +7,7 @@ const bodyParser = require("body-parser");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get("/diagnostic", (req, res) => res.status(200).end("OK"));
+app.get("/diagnostic", (_, res) => res.status(200).end("OK"));
 
 /** Specific bounce */
 app.get("/bounceme", (req, res) => req.query.url
