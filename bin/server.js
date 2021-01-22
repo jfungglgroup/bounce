@@ -1,5 +1,6 @@
 /** Hookup Express */
-const express = require("express");
+const express = require('express');
+const cookieParser = require('cookie-parser');
 const app = express();
 
 /** Configure our body Parser */
@@ -7,12 +8,21 @@ const bodyParser = require("body-parser");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+/** Configure our Cookie Parser */
+app.use(cookieParser());
+
 app.get("/diagnostic", (_, res) => res.status(200).end("OK"));
 
 /** Specific bounce */
-app.get("/bounceme", (req, res) => req.query.url
-  ? res.redirect(req.query.url)
-  : res.status(400).json({ error: "no url" }));
+app.get("/bounceme", (req, res) => {
+  const _param = ~req.query.url.indexOf('?')
+    ? `?_session=${req.cookies._session}`
+    : `&_session=${req.cookies._session}`;
+
+  return req.query.url
+    ? res.redirect(`${req.query.url}${_param}`)
+    : res.status(400).json({ error: "no url" });
+});
 
 app.get('/internalUser', (req, res) => {
   /** Get the domain part of the host */
