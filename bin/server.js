@@ -16,8 +16,10 @@ app.get("/diagnostic", (_, res) => res.status(200).end("OK"));
 /** Specific bounce */
 app.get("/bounceme", (req, res) => {
   const _param = ~req.query.url.indexOf('?')
-    ? `&_session=${req.cookies._session}`
-    : `?_session=${req.cookies._session}`;
+    ? `%3F_session=${req.cookies._session}` // &
+    : `%26_session=${req.cookies._session}` // ?
+  ;
+
 
   return req.query.url
     ? res.redirect(`${req.query.url}${_param}`)
