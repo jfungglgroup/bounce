@@ -20,6 +20,7 @@ app.get("/bounceme", (req, res) => {
     : `%26_session=${req.cookies._session}` // ?
   ;
 
+
   return req.query.url
     ? res.redirect(`${req.query.url}${_param}`)
     : res.status(400).json({ error: "no url" });
