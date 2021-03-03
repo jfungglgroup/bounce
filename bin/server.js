@@ -24,8 +24,10 @@ app.get("/bounceme", (req, res) => {
     : res.status(400).json({ error: "no url" });
 });
 
-const _getRedirectUrl = req =>
-  `${process.env.AUTH_BOUNCE_URL}?url=https://${req.get('host')}${req.headers['x-starphleet-originalurl']}`;
+const _getRedirectUrl = req => {
+  const _encodedURI = encodeURIComponent(`https://${req.get('host')}${req.headers['x-starphleet-originalurl']}`);
+  return `${process.env.AUTH_BOUNCE_URL}?url=${_encodedURI}`;
+};
 
 /** Auth bounce */
 app.all("*", (req, res) => process.env.AUTH_BOUNCE_URL
