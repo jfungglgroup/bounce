@@ -24,6 +24,16 @@ app.get("/bounceme", (req, res) => {
     : res.status(400).json({ error: "no url" });
 });
 
+app.get('/internalUser', (req, res) => {
+  /** Get the domain part of the host */
+  const domain = '.' + req.get('host').split('.').slice(-2).join('.');
+  const httpOnly = true;
+  const maxAge = 60000;
+  const path = '/';
+  res.cookie('internalUser', 'true', { maxAge, httpOnly, domain, path });
+  res.redirect(req.query.url);
+});
+
 const _getRedirectUrl = req => {
   const _encodedURI = encodeURIComponent(`https://${req.get('host')}${req.headers['x-starphleet-originalurl']}`);
   return `${process.env.AUTH_BOUNCE_URL}?url=${_encodedURI}`;
