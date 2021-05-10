@@ -35,7 +35,8 @@ app.get('/internalUser', (req, res) => {
 });
 
 const _getRedirectUrl = req => {
-  const _encodedURI = encodeURIComponent(`https://${req.get('host')}${req.headers['x-starphleet-originalurl']}`);
+  const _originalUrl = req.headers['x-gds-originalurl'] || req.headers['x-starphleet-originalurl'];
+  const _encodedURI = encodeURIComponent(`https://${req.get('host')}${_originalUrl}`);
   return `${process.env.AUTH_BOUNCE_URL}?url=${_encodedURI}`;
 };
 
