@@ -41,10 +41,17 @@ const _getRedirectUrl = req => {
 };
 
 /** Auth bounce */
-app.all("*", (req, res) => process.env.AUTH_BOUNCE_URL
+app.all("*", (req, res) => {
+
+  const _copyOfHeaders = Object.assign({}, req.headers);
+  _copyOfHeaders["x-gds-redirect-key"] = "******";
+  console.log(`Headers from bounce: ${_copyOfHeaders}`);
+  
+  process.env.AUTH_BOUNCE_URL
   // ? res.status(200).json({ url: _getRedirectUrl(req) })
   ? res.redirect(_getRedirectUrl(req))
-  : res.status(400).json({ error: "no AUTH_BOUNCE_URL" }));
+  : res.status(400).json({ error: "no AUTH_BOUNCE_URL" });
+})
 
 /*eslint no-process-env: "off"*/
 app.listen(process.env.PORT || 3000);
