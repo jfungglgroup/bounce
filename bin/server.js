@@ -45,7 +45,7 @@ app.all("*", (req, res) => {
 
   const _copyOfHeaders = Object.assign({}, req.headers);
   _copyOfHeaders["x-gds-redirect-key"] = "******";
-  console.log(`Headers from bounce: ${_copyOfHeaders}`);
+  console.log(`Headers from bounce: ${JSON.stringify(_copyOfHeaders)}`);
   
   process.env.AUTH_BOUNCE_URL
   // ? res.status(200).json({ url: _getRedirectUrl(req) })
