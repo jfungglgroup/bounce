@@ -1,22 +1,44 @@
 name: Build Image and Push to ECR
-on: [push]
+on:
+  push:
+    # You can set these branches to any that you want to build and push images from
+    branches:
+      - main
+      - master
+      - multipass
 jobs:
-  build:
+  build-and-deploy:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # - org: GDS Reverse Proxy Vault
+            # access-key: GDS_REVERSE_PROXY_VAULT_ECR_AWS_SECRET_ACCESS_KEY
+            # ecr-uri: GDS_REVERSE_PROXY_VAULT_ECR_URI
+            # key-id: GDS_REVERSE_PROXY_VAULT_ECR_AWS_ACCESS_KEY_ID
+          # - org: GLG App
+            # access-key: GLGAPP_ECR_AWS_SECRET_ACCESS_KEY
+            # ecr-uri: GLGAPP_ECR_URI
+            # key-id: GLGAPP_ECR_AWS_ACCESS_KEY_ID
+          # - org: Insights
+            # access-key: INSIGHTS_ECR_AWS_SECRET_ACCESS_KEY
+            # ecr-uri: INSIGHTS_ECR_URI
+            # key-id: INSIGHTS_ECR_AWS_ACCESS_KEY_ID
+          - org: Prototype
+            access-key: PROTOTYPE_ECR_AWS_SECRET_ACCESS_KEY
+            key-id: PROTOTYPE_ECR_AWS_ACCESS_KEY_ID
+            ecr-uri: PROTOTYPE_ECR_URI
     runs-on: ubuntu-20.04
     steps:
-    - uses: actions/checkout@master
-    - name: Build A Docker Image and Push to AWS ECR
-      run: |
-        BRANCH=$(echo ${{github.ref}} | cut -f3 -d'/')
-        CONTAINER_IMAGE="${{secrets.ECR_URI}}/github/${{github.repository}}/${BRANCH}"
-        CONTAINER_IMAGE_SHA="${CONTAINER_IMAGE}:${{github.sha}}"
-        CONTAINER_IMAGE_LATEST="${CONTAINER_IMAGE}:latest"
-        AWS_REGION=$(echo ${{secrets.ECR_URI}} | cut -f4 -d'.')
+      # Checks out the code from this repo
+      - uses: actions/checkout@v2
 
-        AWS_ACCESS_KEY_ID="${{secrets.ECR_AWS_ACCESS_KEY_ID}}" \
-        AWS_SECRET_ACCESS_KEY="${{secrets.ECR_AWS_SECRET_ACCESS_KEY}}" \
-          aws ecr get-login-password --region "${AWS_REGION}" | docker login --username AWS --password-stdin ${{secrets.ECR_URI}}
-
-        docker build -t $CONTAINER_IMAGE_SHA -t $CONTAINER_IMAGE_LATEST .
-        docker push $CONTAINER_IMAGE_SHA
-        docker push $CONTAINER_IMAGE_LATEST
+      # Builds a docker image from ./dockerfile, and pushes it to our ECR repository
+      - name: Build and push to ${{ matrix.org }}
+        uses: glg-public/build-and-deploy-ecr@multipass
+        with:
+          access_key_id: ${{ secrets[matrix.key-id] }}
+          ecr_uri: ${{ secrets[matrix.ecr-uri] }}
+          github_ssh_key: ${{ secrets.DEPLOYMENT_SSH_KEY }}
+          secret_access_key: ${{ secrets[matrix.access-key] }}
+          multipass: aws://${{ secrets.GLGAPP_ECR_AWS_ACCESS_KEY_ID }}:${{ secrets.GLGAPP_ECR_AWS_SECRET_ACCESS_KEY }}@${{ secrets.GLGAPP_ECR_URI }}
