@@ -42,4 +42,6 @@ jobs:
           github_ssh_key: ${{ secrets.DEPLOYMENT_SSH_KEY }}
           healthcheck: ""
           secret_access_key: ${{ secrets[matrix.access-key] }}
-          multipass: aws://${{ secrets.GLGAPP_ECR_AWS_ACCESS_KEY_ID }}:${{ secrets.GLGAPP_ECR_AWS_SECRET_ACCESS_KEY }}@${{ secrets.GLGAPP_ECR_URI }}
+          multipass: |
+            aws://${{ secrets.GLGAPP_ECR_AWS_ACCESS_KEY_ID }}:${{ secrets.GLGAPP_ECR_AWS_SECRET_ACCESS_KEY }}@${{ secrets.GLGAPP_ECR_URI }}
+            aws://${{ secrets.INSIGHTS_ECR_AWS_ACCESS_KEY_ID }}:${{ secrets.INSIGHTS_ECR_AWS_SECRET_ACCESS_KEY }}@${{ secrets.INSIGHTS_ECR_URI }}
