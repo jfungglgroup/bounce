@@ -40,5 +40,6 @@ jobs:
           access_key_id: ${{ secrets[matrix.key-id] }}
           ecr_uri: ${{ secrets[matrix.ecr-uri] }}
           github_ssh_key: ${{ secrets.DEPLOYMENT_SSH_KEY }}
+          healthcheck: ""
           secret_access_key: ${{ secrets[matrix.access-key] }}
           multipass: aws://${{ secrets.GLGAPP_ECR_AWS_ACCESS_KEY_ID }}:${{ secrets.GLGAPP_ECR_AWS_SECRET_ACCESS_KEY }}@${{ secrets.GLGAPP_ECR_URI }}
