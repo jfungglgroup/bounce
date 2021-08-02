@@ -8,38 +8,17 @@ on:
       - multipass
 jobs:
   build-and-deploy:
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          # - org: GDS Reverse Proxy Vault
-            # access-key: GDS_REVERSE_PROXY_VAULT_ECR_AWS_SECRET_ACCESS_KEY
-            # ecr-uri: GDS_REVERSE_PROXY_VAULT_ECR_URI
-            # key-id: GDS_REVERSE_PROXY_VAULT_ECR_AWS_ACCESS_KEY_ID
-          # - org: GLG App
-            # access-key: GLGAPP_ECR_AWS_SECRET_ACCESS_KEY
-            # ecr-uri: GLGAPP_ECR_URI
-            # key-id: GLGAPP_ECR_AWS_ACCESS_KEY_ID
-          # - org: Insights
-            # access-key: INSIGHTS_ECR_AWS_SECRET_ACCESS_KEY
-            # ecr-uri: INSIGHTS_ECR_URI
-            # key-id: INSIGHTS_ECR_AWS_ACCESS_KEY_ID
-          - org: Prototype
-            access-key: PROTOTYPE_ECR_AWS_SECRET_ACCESS_KEY
-            key-id: PROTOTYPE_ECR_AWS_ACCESS_KEY_ID
-            ecr-uri: PROTOTYPE_ECR_URI
     runs-on: ubuntu-20.04
     steps:
       # Checks out the code from this repo
       - uses: actions/checkout@v2
 
       # Builds a docker image from ./dockerfile, and pushes it to our ECR repository
-      - name: Build and push to ${{ matrix.org }}
-        uses: glg-public/build-and-deploy-ecr@multipass
+      - uses: glg-public/build-and-deploy-ecr@multipass
         with:
-          access_key_id: ${{ secrets[matrix.key-id] }}
-          ecr_uri: ${{ secrets[matrix.ecr-uri] }}
+          access_key_id: ${{ secrets.PROTOTYPE_ECR_AWS_ACCESS_KEY_ID }}
+          ecr_uri: ${{ secrets.PROTOTYPE_ECR_URI }}
           github_ssh_key: ${{ secrets.DEPLOYMENT_SSH_KEY }}
           healthcheck: ""
-          secret_access_key: ${{ secrets[matrix.access-key] }}
+          secret_access_key: ${{ secrets.PROTOTYPE_ECR_AWS_SECRET_ACCESS_KEY }}
           multipass: aws://${{ secrets.GLGAPP_ECR_AWS_ACCESS_KEY_ID }}:${{ secrets.GLGAPP_ECR_AWS_SECRET_ACCESS_KEY }}@${{ secrets.GLGAPP_ECR_URI }},aws://${{ secrets.INSIGHTS_ECR_AWS_ACCESS_KEY_ID }}:${{ secrets.INSIGHTS_ECR_AWS_SECRET_ACCESS_KEY }}@${{ secrets.INSIGHTS_ECR_URI }}
