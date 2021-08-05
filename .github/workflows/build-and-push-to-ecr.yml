@@ -19,8 +19,8 @@ jobs:
           ecr_uri: ${{ secrets.PROTOTYPE_ECR_URI }}
           github_ssh_key: ${{ secrets.DEPLOYMENT_SSH_KEY }}
           healthcheck: ""
-          secret_access_key: ${{ secrets.PROTOTYPE_ECR_AWS_SECRET_ACCESS_KEY }}
-          multipass: |
+          registries: |
             aws://${{ secrets.GLGAPP_ECR_AWS_ACCESS_KEY_ID }}:${{ secrets.GLGAPP_ECR_AWS_SECRET_ACCESS_KEY }}@${{ secrets.GLGAPP_ECR_URI }}
             aws://${{ secrets.INSIGHTS_ECR_AWS_ACCESS_KEY_ID }}:${{ secrets.INSIGHTS_ECR_AWS_SECRET_ACCESS_KEY }}@${{ secrets.INSIGHTS_ECR_URI }}
             aws://${{ secrets.GDS_REVERSE_PROXY_VAULT_ECR_AWS_ACCESS_KEY_ID }}:${{ secrets.GDS_REVERSE_PROXY_VAULT_ECR_AWS_SECRET_ACCESS_KEY }}@${{ secrets.GDS_REVERSE_PROXY_VAULT_ECR_URI }}
+          secret_access_key: ${{ secrets.PROTOTYPE_ECR_AWS_SECRET_ACCESS_KEY }}
