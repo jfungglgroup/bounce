@@ -1,22 +1,22 @@
-name: Build Image and Push to ECR
-on: [push]
+# vi:syntax=yaml
+name: Build Image and Push to glgapp ECR
+on:
+  push:
+    # You can set these branches to any that you want to build and push images from
+    branches:
+      - main
+      - master
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-20.04
     steps:
-    - uses: actions/checkout@master
-    - name: Build A Docker Image and Push to AWS ECR
-      run: |
-        BRANCH=$(echo ${{github.ref}} | cut -f3 -d'/')
-        CONTAINER_IMAGE="${{secrets.ECR_URI}}/github/${{github.repository}}/${BRANCH}"
-        CONTAINER_IMAGE_SHA="${CONTAINER_IMAGE}:${{github.sha}}"
-        CONTAINER_IMAGE_LATEST="${CONTAINER_IMAGE}:latest"
-        AWS_REGION=$(echo ${{secrets.ECR_URI}} | cut -f4 -d'.')
+      # Checks out the code from this repo
+      - uses: actions/checkout@main
 
-        AWS_ACCESS_KEY_ID="${{secrets.ECR_AWS_ACCESS_KEY_ID}}" \
-        AWS_SECRET_ACCESS_KEY="${{secrets.ECR_AWS_SECRET_ACCESS_KEY}}" \
-          aws ecr get-login-password --region "${AWS_REGION}" | docker login --username AWS --password-stdin ${{secrets.ECR_URI}}
-
-        docker build -t $CONTAINER_IMAGE_SHA -t $CONTAINER_IMAGE_LATEST .
-        docker push $CONTAINER_IMAGE_SHA
-        docker push $CONTAINER_IMAGE_LATEST
+      # Builds a docker image from ./dockerfile, and pushes it to our ECR repository
+      - uses: glg-public/build-and-deploy-ecr@main
+        with:
+          ecr_uri: ${{secrets.GLGAPP_ECR_URI}}
+          access_key_id: ${{secrets.GLGAPP_ECR_AWS_ACCESS_KEY_ID}}
+          secret_access_key: ${{secrets.GLGAPP_ECR_AWS_SECRET_ACCESS_KEY}}
+          healthcheck: ""
