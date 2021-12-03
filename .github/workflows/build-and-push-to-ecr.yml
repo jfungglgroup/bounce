@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - master
+      - debug
 jobs:
   build-and-deploy:
     runs-on: ubuntu-20.04
