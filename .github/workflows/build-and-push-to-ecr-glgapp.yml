@@ -1,5 +1,5 @@
 # vi:syntax=yaml
-name: Build Image and Push to ECR
+name: Build Image and Push to ECR glgapp
 on:
   push:
     branches:
