@@ -43,7 +43,7 @@ const _getRedirectUrl = req => {
 /** Auth bounce */
 app.all("*", (req, res) => process.env.AUTH_BOUNCE_URL
   // ? res.status(200).json({ url: _getRedirectUrl(req) })
-  ? res.redirect(_getRedirectUrl(req))
+  ? res.redirect(307, _getRedirectUrl(req))
   : res.status(400).json({ error: "no AUTH_BOUNCE_URL" }));
 
 /*eslint no-process-env: "off"*/
