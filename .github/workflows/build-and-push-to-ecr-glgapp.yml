@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - redirect-307
 jobs:
   build-and-deploy-glgapp:
     runs-on: ubuntu-20.04
