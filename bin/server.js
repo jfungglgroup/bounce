@@ -14,13 +14,13 @@ app.use(cookieParser());
 app.get("/diagnostic", (_, res) => res.status(200).end("OK"));
 
 /** Specific bounce */
-app.get("/bounceme", (req, res) => {
+app.all("/bounceme", (req, res) => {
   const _param = ~req.query.url.indexOf('?')
     ? `&_session=${req.cookies._session}`
     : `?_session=${req.cookies._session}`;
 
   return req.query.url
-    ? res.redirect(`${req.query.url}${_param}`)
+    ? res.redirect(307, `${req.query.url}${_param}`)
     : res.status(400).json({ error: "no url" });
 });
 
@@ -43,7 +43,7 @@ const _getRedirectUrl = req => {
 /** Auth bounce */
 app.all("*", (req, res) => process.env.AUTH_BOUNCE_URL
   // ? res.status(200).json({ url: _getRedirectUrl(req) })
-  ? res.redirect(_getRedirectUrl(req))
+  ? res.redirect(307, _getRedirectUrl(req))
   : res.status(400).json({ error: "no AUTH_BOUNCE_URL" }));
 
 /*eslint no-process-env: "off"*/
