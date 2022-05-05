@@ -6,7 +6,7 @@ on:
     branches:
       - main
 jobs:
-  build-and-deploy:
+  build-and-deploy-conference-platform:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@main
@@ -15,3 +15,4 @@ jobs:
           ecr_uri: ${{secrets.CONFERENCE_PLATFORM_ECR_URI}}
           access_key_id: ${{secrets.CONFERENCE_PLATFORM_ECR_AWS_ACCESS_KEY_ID}}
           secret_access_key: ${{secrets.CONFERENCE_PLATFORM_ECR_AWS_SECRET_ACCESS_KEY}}
+          healthcheck: ""
