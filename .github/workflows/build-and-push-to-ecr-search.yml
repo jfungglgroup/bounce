@@ -21,6 +21,5 @@ jobs:
           ecr_uri: ${{secrets.SEARCH_ECR_URI}}
           access_key_id: ${{secrets.SEARCH_ECR_AWS_ACCESS_KEY_ID}}
           secret_access_key: ${{secrets.SEARCH_ECR_AWS_SECRET_ACCESS_KEY}}
-          dockerfile: solr_docker/Dockerfile
           healthcheck: ''
           platform: linux/arm64
