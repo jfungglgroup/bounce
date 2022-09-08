@@ -15,11 +15,6 @@ app.get("/diagnostic", (_, res) => res.status(200).end("OK"));
 
 /** Specific bounce */
 app.get("/bounceme", (req, res) => {
-
-  const _copyOfHeaders = Object.assign({}, req.headers);
-  _copyOfHeaders["x-gds-redirect-key"] = "******";
-  console.log(`Headers from /bounceme: ${JSON.stringify(_copyOfHeaders)}`);
-
   
   const _param = ~req.query.url.indexOf('?')
     ? `&_session=${req.cookies._session}`
@@ -48,10 +43,6 @@ const _getRedirectUrl = req => {
 
 /** Auth bounce */
 app.all("*", (req, res) => {
-
-  const _copyOfHeaders = Object.assign({}, req.headers);
-  _copyOfHeaders["x-gds-redirect-key"] = "******";
-  console.log(`Headers from bounce: ${JSON.stringify(_copyOfHeaders)}`);
   
   process.env.AUTH_BOUNCE_URL
   // ? res.status(200).json({ url: _getRedirectUrl(req) })
